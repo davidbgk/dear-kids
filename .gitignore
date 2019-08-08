@@ -1,0 +1,3 @@
+.mypy_cache
+dear_kids.egg-info
+*.pyc
