@@ -3,6 +3,7 @@ from pathlib import Path
 
 import jinja2
 import uvloop
+from accept_language import parse_accept_language
 from jinja2 import Environment, PackageLoader, select_autoescape
 from roll import Request, Response
 from roll import Roll as BaseRoll
@@ -20,9 +21,12 @@ asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 def i18n(app):
     @app.listen("request")
     async def guess_language(request, response):
-        accept_language = request.headers.get("ACCEPT-LANGUAGE")
-        # Very naive, yet very efficient?
-        request.language = accept_language[:2] if accept_language else "en"
+        language = "en"
+        accept_language_header = request.headers.get("ACCEPT-LANGUAGE")
+        languages = parse_accept_language(accept_language_header)
+        if languages:
+            language = languages[0].language
+        request.language = language
 
 
 class LanguageAwareRequest(Request):
