@@ -4,13 +4,13 @@ help:  ## Display this help
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n\nTargets:\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
 
 check:  ## Run code checkers
-	black .
+	black . --quiet
 	flake8
-	mypy .
-	isort
+	mypy dearkids
+	isort --quiet
 
 test:  ## Run tests
-	pytest --ff --disable-warnings -x
+	pytest --ff --disable-warnings -x --quiet
 
 run:  ## Run local server
 	python dearkids
