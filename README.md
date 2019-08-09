@@ -39,3 +39,5 @@ make check test
 pip install gunicorn
 make prod
 ```
+
+Serve statics with anything else *but* the Roll extension.

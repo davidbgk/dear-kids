@@ -1,10 +1,13 @@
 import asyncio
+from pathlib import Path
 
 import uvloop
 from jinja2 import Environment, PackageLoader, select_autoescape
 from roll import Response
 from roll import Roll as BaseRoll
-from roll.extensions import logger, simple_server, traceback
+from roll.extensions import logger, simple_server, static, traceback
+
+HERE = Path(__file__)
 
 env = Environment(
     loader=PackageLoader("dearkids", "templates"),
@@ -26,6 +29,7 @@ class Roll(BaseRoll):
 app = Roll()
 logger(app)
 traceback(app)
+static(app, root=HERE.parent / "static")
 
 
 @app.route("/")

@@ -1,0 +1,19 @@
+:root {
+    /* coolors.co/3f0d12-a71d31-f1f0cc-d5bf86-8d775f */
+    --color-dark-sienna: #3f0d12;
+    --color-vivid-burgundi: #a71d31;
+    --color-champagne: #f1f0cc;
+    --color-burlywood: #d5bf86;
+    --color-shadow: #8d775f;
+}
+
+body {
+    background: var(--color-champagne);
+    color: var(--color-dark-sienna);
+    border-left: 4px solid var(--color-vivid-burgundi);
+    border-right: 4px solid var(--color-vivid-burgundi);
+    margin: 0 auto;
+    max-width: 50rem;
+    padding: 3rem 5rem;
+    min-height: calc(100vh - 3rem * 2);
+}
