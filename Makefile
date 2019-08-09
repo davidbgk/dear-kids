@@ -19,7 +19,7 @@ test:  ## Run tests
 	pytest --ff --disable-warnings -x --quiet
 
 run:  ## Run local server
-	python dearkids
+	dearkids
 
 prod:  ## Run gunicorn server
 	gunicorn dearkids.__main__:app --worker-class roll.worker.Worker

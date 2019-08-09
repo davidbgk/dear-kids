@@ -52,5 +52,5 @@ async def essay(
     response.html(template, content=content)
 
 
-if __name__ == "__main__":
+def run() -> None:
     simple_server(app)
