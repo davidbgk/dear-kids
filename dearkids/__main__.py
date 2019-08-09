@@ -1,11 +1,13 @@
 import asyncio
+from http import HTTPStatus
 from pathlib import Path
 
 import jinja2
 import uvloop
 from accept_language import parse_accept_language
+from commonmark import commonmark
 from jinja2 import Environment, PackageLoader, select_autoescape
-from roll import Request, Response
+from roll import HttpError, Request, Response
 from roll import Roll as BaseRoll
 from roll.extensions import logger, simple_server, static, traceback
 
@@ -72,11 +74,30 @@ def language_aware_template(template_name: str, language_code: str) -> jinja2.Te
         return env.get_template(template_name)
 
 
+def get_md_content_from_disk(file_name: str) -> str:
+    with open(HERE.parent / "essays" / f"{file_name}.md") as md_file:
+        return md_file.read()
+
+
 @app.route("/")
 async def home(request: LanguageAwareRequest, response: HTMLResponse) -> None:
     template_name = "home.html"
     template = language_aware_template(template_name, request.language)
     response.html(template)
+
+
+@app.route("/essay/{parameter}")
+async def essay(
+    request: LanguageAwareRequest, response: HTMLResponse, parameter: str
+) -> None:
+    template_name = "essay.html"
+    template = language_aware_template(template_name, request.language)
+    try:
+        md_content = get_md_content_from_disk(parameter)
+    except FileNotFoundError:
+        raise HttpError(HTTPStatus.NOT_FOUND, "Essay not found.")
+    content = commonmark(md_content)
+    response.html(template, content=content)
 
 
 if __name__ == "__main__":

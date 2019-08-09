@@ -26,6 +26,19 @@ async def test_home_fr(client, app):
     assert b"<h1>Les enfants,</h1>" in resp.body
 
 
+async def test_essay(client, app):
+    resp = await client.get("/essay/sorry")
+    assert resp.status == HTTPStatus.OK
+    assert resp.headers["Content-Type"] == "text/html; charset=utf-8"
+    assert b"<p><em>Deeply</em> sorry.</p>" in resp.body
+
+
+async def test_essay_missing(client, app):
+    resp = await client.get("/essay/notfound")
+    assert resp.status == HTTPStatus.NOT_FOUND
+    assert resp.body == b"Essay not found."
+
+
 async def test_stylesheet(client, app):
     resp = await client.get("/static/styles.css")
     assert resp.status == HTTPStatus.OK
