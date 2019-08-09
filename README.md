@@ -19,7 +19,7 @@ vf new --python=python3.7 dearkids
 ## Installation
 
 ```
-pip install -e .
+make install
 make run
 => Rolling on http://127.0.0.1:3579
 ```
@@ -28,8 +28,9 @@ make run
 ## Development
 
 ```
-pip install -r requirements-dev.txt
-make check test
+make dev
+make check
+make test
 ```
 
 
