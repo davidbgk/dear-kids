@@ -20,7 +20,7 @@ asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
 def i18n(app):
     @app.listen("request")
-    async def guess_language(request, response):
+    async def guess_language(request: LanguageAwareRequest, response: Response):
         language = "en"
         accept_language_header = request.headers.get("ACCEPT-LANGUAGE")
         languages = parse_accept_language(accept_language_header)
@@ -48,7 +48,7 @@ class LanguageAwareRequest(Request):
 
 
 class HTMLResponse(Response):
-    def html(self, template, *args, **kwargs):
+    def html(self, template: jinja2.Template, *args, **kwargs) -> None:
         self.headers["Content-Type"] = "text/html; charset=utf-8"
         self.body = template.render(*args, **kwargs)
 
@@ -65,7 +65,7 @@ static(app, root=HERE.parent / "static")
 i18n(app)
 
 
-def language_aware_template(template_name, language_code):
+def language_aware_template(template_name: str, language_code: str) -> jinja2.Template:
     try:
         return env.get_template(f"{language_code}.{template_name}")
     except jinja2.exceptions.TemplateNotFound:
@@ -73,7 +73,7 @@ def language_aware_template(template_name, language_code):
 
 
 @app.route("/")
-async def home(request, response):
+async def home(request: LanguageAwareRequest, response: HTMLResponse) -> None:
     template_name = "home.html"
     template = language_aware_template(template_name, request.language)
     response.html(template)
