@@ -30,10 +30,11 @@ i18n(app)
 
 
 @app.route("/")
-async def home(request: Request, response: CustomResponse) -> None:
-    template_name = "home.html"
-    template = language_aware_template(template_name, request["language"])
-    response.html(template)
+class Home:
+    async def on_get(self, request: Request, response: CustomResponse) -> None:
+        template_name = "home.html"
+        template = language_aware_template(template_name, request["language"])
+        response.html(template)
 
 
 @app.route("/essay/{parameter}")
