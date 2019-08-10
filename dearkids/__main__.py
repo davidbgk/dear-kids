@@ -4,12 +4,11 @@ from pathlib import Path
 
 import uvloop
 from commonmark import commonmark
-from roll import HttpError
+from roll import HttpError, Request
 from roll import Roll as BaseRoll
 from roll.extensions import logger, simple_server, static, traceback
 
 from .extensions import i18n
-from .request import CustomRequest
 from .response import CustomResponse
 from .templating import language_aware_template
 from .utils import get_md_content_from_disk
@@ -20,7 +19,6 @@ asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
 
 class Roll(BaseRoll):
-    Request = CustomRequest
     Response = CustomResponse
 
 
@@ -32,18 +30,16 @@ i18n(app)
 
 
 @app.route("/")
-async def home(request: CustomRequest, response: CustomResponse) -> None:
+async def home(request: Request, response: CustomResponse) -> None:
     template_name = "home.html"
-    template = language_aware_template(template_name, request.language)
+    template = language_aware_template(template_name, request["language"])
     response.html(template)
 
 
 @app.route("/essay/{parameter}")
-async def essay(
-    request: CustomRequest, response: CustomResponse, parameter: str
-) -> None:
+async def essay(request: Request, response: CustomResponse, parameter: str) -> None:
     template_name = "essay.html"
-    template = language_aware_template(template_name, request.language)
+    template = language_aware_template(template_name, request["language"])
     try:
         md_content = get_md_content_from_disk(parameter)
     except FileNotFoundError:
