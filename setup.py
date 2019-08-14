@@ -1,6 +1,6 @@
 from setuptools import setup
 
-requires = ["commonmark", "jinja2", "parse-accept-language", "roll", "uvloop"]
+requires = ["bleach", "commonmark", "jinja2", "parse-accept-language", "roll", "uvloop"]
 
 setup(
     name="dear-kids",

@@ -1,6 +1,8 @@
 import time
 from pathlib import Path
 
+import bleach
+
 from .baseconv import base57
 
 HERE = Path(__file__)
@@ -18,3 +20,7 @@ def save_md_content_to_disk(content: str) -> str:
         md_file.write(content)
 
     return str(file_name)
+
+
+def escape_content(content: str, allowed_tags: list) -> str:
+    return bleach.clean(content, tags=allowed_tags, strip=True)

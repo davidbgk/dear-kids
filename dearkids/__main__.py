@@ -11,9 +11,10 @@ from roll.extensions import logger, simple_server, static, traceback
 from .extensions import i18n
 from .response import CustomResponse
 from .templating import language_aware_template
-from .utils import get_md_content_from_disk, save_md_content_to_disk
+from .utils import escape_content, get_md_content_from_disk, save_md_content_to_disk
 
 HERE = Path(__file__)
+ALLOWED_TAGS = ["p", "strong", "em"]
 
 asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
@@ -53,6 +54,7 @@ async def essay(request: Request, response: CustomResponse, parameter: str) -> N
     except FileNotFoundError:
         raise HttpError(HTTPStatus.NOT_FOUND, "Essay not found.")
     content = commonmark(md_content)
+    content = escape_content(content, allowed_tags=ALLOWED_TAGS)
     response.html(template, content=content)
 
 

@@ -26,3 +26,13 @@ async def test_essay_submission(client, app):
     resp = await client.get(resp.headers["Location"])
     assert resp.status == HTTPStatus.OK
     assert b"<p>foo</p>" in resp.body
+
+
+async def test_essay_submission_with_commonmark(client, app):
+    client.content_type = "application/x-www-form-urlencoded"
+    resp = await client.post("/essay/", body={"essay": "**foo**"})
+    assert resp.status == HTTPStatus.FOUND
+    assert resp.headers["Location"].startswith("/essay/")
+    resp = await client.get(resp.headers["Location"])
+    assert resp.status == HTTPStatus.OK
+    assert b"<p><strong>foo</strong></p>" in resp.body
