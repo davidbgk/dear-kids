@@ -16,4 +16,20 @@ body {
     max-width: 50rem;
     padding: 3rem 5rem;
     min-height: calc(100vh - 3rem * 2);
+    font-size: 150%;
+}
+
+fieldset {
+    padding: 1rem;
+}
+textarea {
+    color: var(--color-dark-sienna);
+    font-size: 1.7rem;
+    width: calc(100% - 1rem);
+    padding: .5rem;
+}
+input[type="submit"] {
+    margin: 1rem;
+    width: calc(100% - 2rem);
+    font-size: 2rem;
 }

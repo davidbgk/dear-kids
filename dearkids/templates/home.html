@@ -4,4 +4,13 @@
 
 {% block content %}
     <h1>Dear kids,</h1>
+
+    <form action="/essay/" method="post">
+        <fieldset>
+            <legend>Type your essay:</legend>
+            <label for="essay">Content of your essay, only **bold** and *italic* are accepted.</label>
+            <textarea name="essay" rows="20"></textarea>
+            <input type="submit" value="Save">
+        </fieldset>
+    </form>
 {% endblock %}

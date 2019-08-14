@@ -11,7 +11,7 @@ from roll.extensions import logger, simple_server, static, traceback
 from .extensions import i18n
 from .response import CustomResponse
 from .templating import language_aware_template
-from .utils import get_md_content_from_disk
+from .utils import get_md_content_from_disk, save_md_content_to_disk
 
 HERE = Path(__file__)
 
@@ -30,11 +30,18 @@ i18n(app)
 
 
 @app.route("/")
-class Home:
-    async def on_get(self, request: Request, response: CustomResponse) -> None:
-        template_name = "home.html"
-        template = language_aware_template(template_name, request["language"])
-        response.html(template)
+async def home(request: Request, response: CustomResponse) -> None:
+    template_name = "home.html"
+    template = language_aware_template(template_name, request["language"])
+    response.html(template)
+
+
+@app.route("/essay/", methods=["POST"])
+async def on_post(request: Request, response: CustomResponse) -> None:
+    essay_content = request.form.get("essay")
+    name = save_md_content_to_disk(essay_content)
+    response.status = HTTPStatus.FOUND
+    response.headers["Location"] = f"/essay/{name}"
 
 
 @app.route("/essay/{parameter}")
